@@ -2,8 +2,9 @@ import requests
 import time
 import pandas as pd  # Import pandas for data handling
 import random
+import xlwings as xw
 
-API_KEY = {'X-API-key': 'P0U2IVMW'}  # Step 2
+API_KEY = {'X-API-key': '3CJNDK9B'}  # Step 2
 BASE_API_URL = 'http://localhost:9999/v1'
 
 class APIClient:
@@ -120,10 +121,16 @@ def main(instance):
     update_threshold = 45  # Duration in seconds before export
 
     while True:  # Continuously monitor for tick updates
+        # df = pd.read_excel('RIT - Decision Support - FI Capstone Case - vRelease.xlsx', sheet_name='Base Support Sheet')  # Specify the sheet name
         current_tick = case_instance.get_current_tick()  # Get the adjusted current tick
+        wb = xw.Book("RIT - Decision Support - FI Capstone Case - vRelease.xlsx")  # Specify your workbook name
+        sheet = wb.sheets["Base Support Sheet"]  # Specify your sheet name
 
         if current_tick != previous_tick:  # Check if the tick has changed
-            print(f'Tick updated to: {current_tick}')  # Print the updated tick
+            # print(df['Unnamed: 7'])
+            #print(f'Tick updated to: {current_tick}')  # Print the updated tick
+            value = sheet.range("H32").value
+            print("Live value in cell H32:", value)
             
             # Fetch updated securities data
             securities_instance.securities_data = securities_instance.fetch_data()
@@ -290,9 +297,9 @@ new_transactions = update_portfolio(previous_portfolio, max_holdings)
 
 
 if __name__ == "__main__":
-    for i in range(3,9):
-        main(i)
-    # main(1)
+    # for i in range(3,9):
+    #     main(i)
+    main(2)
     #trade()
 
 
